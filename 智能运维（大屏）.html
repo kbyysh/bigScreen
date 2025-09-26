@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>zgzn-design</title>
+    <link rel="stylesheet" type="text/css" href="./common/css/reset.css" />
+    <link rel="stylesheet" type="text/css" href="./common/css/happy-scroll.css" />
+    <link rel="stylesheet" type="text/css" href="./common/iconfont/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="./common/css/element.css" />
+    <link rel="stylesheet" type="text/css" href="./common/css/index.css" />
+    <script type="text/javascript" src="./common/js/vue.min.js"></script>
+    <script type="text/javascript" src="./common/js/element.js"></script>
+    <script type="text/javascript" src="./common/js/axios.js"></script>
+    <script type="text/javascript" src="./common/js/cube.js"></script>
+    <script type="text/javascript" src="./common/js/lodash.js"></script>
+	<script type="text/javascript" src="./data/page64014dfe5dfa7817f233f008.js"></script>
+	<script type="text/javascript" src="./data/text64014dfe5dfa7817f233f008.js"></script>
+	<script type="text/javascript" src="./data/node64014dfe5dfa7817f233f008.js"></script>
+    <script>
+      /**
+       * 全局变量池类
+       * **/
+      function GlobalVariablePool() {
+        this.pool = {};
+      }
+
+      GlobalVariablePool.prototype.set = function (key, data) {
+        this.pool[key] = data;
+      };
+      GlobalVariablePool.prototype.get = function (key) {
+        return this.pool[key];
+      };
+      GlobalVariablePool.prototype.dispose = function (key) {
+        delete this.pool[key];
+      };
+      /**
+       * 实例化全局变量池
+       * **/
+      window.globalVariablePool = new GlobalVariablePool();
+
+      var appConfig = {
+        base: './plugin/',
+        debug: false
+      };
+      Cube.init({
+        base: appConfig.base, //静态资源路由
+        charset: 'utf-8',
+        debug: appConfig.debug
+      });
+
+      window.baseUrl = appConfig.base;
+      window.pluginObj = {};
+      Cube.use('system/version.js', cfg => {
+        jsonData.components.forEach(item => {
+          if (item.config) {
+            let path = cfg[item.cptid].name + '/' + item.version + '/index.js';
+            Cube.use(path);
+          }
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div class="container" id="contain" v-if="pageInfo" v-cloak>
+      <!-- <happy-scroll color="rgba(74,93,117,0.5)" :min-length-h="0" size="10" :hide-vertical="hideY" :hide-horizontal="pageInfo.view.scale === 1 ? true : false" resize> -->
+      <div :style="{width: `${parSize.x}px`, height: `${parSize.y}px`}" style="overflow: hidden">
+        <div class="container_body" :style="{...canStyle, ...bodyStyle}" ref="pages">
+          <div
+            v-for="(item, i) in elData"
+            :key="item.eid"
+            :ref="item.eid"
+            v-show="!item.state.includes(2)"
+            :style="`
+                position: absolute;
+                width: ${item.view.width}px;
+                height: ${item.view.height}px;
+                left: ${item.view.x}px;
+                top: ${item.view.y}px;
+                zIndex: ${item.zIndex};
+                ${item.preserve && isPreserve(item.preserve) ? `transform-style: preserve-3d; perspective:${item.preserve.perspective}px` : ''}
+              `"
+          >
+            <div
+              class="render_contain"
+              v-show="!item.loadMessage"
+              :style="
+                  item.preserve && isPreserve(item.preserve)
+                    ? `
+                      opacity: ${
+                        item.hasOwnProperty('opacity') ? item.opacity : 1
+                      };
+                      transform-origin: ${item.preserve.originX}px ${
+                        item.preserve.originY
+                      }px;
+                      transform-style: preserve-3d;
+                      transform: rotateX(${item.preserve.rotateX}deg) rotateY(${
+                        item.preserve.rotateY
+                      }deg) rotateZ(${item.preserve.rotateZ}deg)
+                    `
+                    : `opacity: ${item.hasOwnProperty('opacity') ? item.opacity : 1};`
+                "
+            >
+              <div
+                v-if="item.children"
+                v-for="obj in item.child"
+                :key="obj.eid"
+                :ref="obj.eid"
+                v-show="!obj.state.includes(2)"
+                :style="`
+                    position: absolute;
+                    width: ${obj.view.width}px;
+                    height: ${obj.view.height}px;
+                    left: ${obj.view.x}px;
+                    top: ${obj.view.y}px;
+                    zIndex: ${obj.zIndex};
+                    ${obj.preserve && isPreserve(obj.preserve) ? `transform-style: preserve-3d; perspective:${obj.preserve.perspective}px` : ''}
+                  `"
+              >
+                <div
+                  class="render_contain"
+                  v-show="!obj.loadMessage"
+                  :style="
+                      obj.preserve && isPreserve(obj.preserve)
+                        ? `
+                          opacity: ${
+                            obj.hasOwnProperty('opacity') ? obj.opacity : 1
+                          };
+                          transform-origin: ${obj.preserve.originX}px ${
+                            obj.preserve.originY
+                          }px;
+                          transform-style: preserve-3d;
+                          transform: rotateX(${obj.preserve.rotateX}deg) rotateY(${
+                            obj.preserve.rotateY
+                          }deg) rotateZ(${obj.preserve.rotateZ}deg)
+                        `
+                        : `opacity: ${obj.hasOwnProperty('opacity') ? obj.opacity : 1};`
+                    "
+                >
+                  <div
+                    v-if="obj.children"
+                    v-for="val in obj.child"
+                    :key="val.eid"
+                    :ref="val.eid"
+                    v-show="!val.state.includes(2)"
+                    :style="`
+                        position: absolute;
+                        width: ${val.view.width}px;
+                        height: ${val.view.height}px;
+                        left: ${val.view.x}px;
+                        top: ${val.view.y}px;
+                        zIndex: ${val.zIndex};
+                        ${val.preserve && isPreserve(val.preserve) ? `transform-style: preserve-3d; perspective:${val.preserve.perspective}px` : ''}
+                      `"
+                  >
+                    <div
+                      class="render_contain"
+                      v-show="!val.loadMessage"
+                      :style="
+                          val.preserve && isPreserve(val.preserve)
+                            ? `
+                              opacity: ${
+                                val.hasOwnProperty('opacity') ? val.opacity : 1
+                              };
+                              transform-origin: ${val.preserve.originX}px ${
+                                val.preserve.originY
+                              }px;
+                              transform-style: preserve-3d;
+                              transform: rotateX(${val.preserve.rotateX}deg) rotateY(${
+                                val.preserve.rotateY
+                              }deg) rotateZ(${val.preserve.rotateZ}deg)
+                            `
+                            : `opacity: ${val.hasOwnProperty('opacity') ? val.opacity : 1};`
+                        "
+                    ></div>
+                    <i
+                      class="el-icon-loading"
+                      v-if="val.loading"
+                      :style="{fontSize: '20px', left: (val.view.width - 20) / 2 + 'px', top: (val.view.height - 20) / 2 + 'px'}"
+                    ></i>
+                    <p
+                      class="render_contain_info"
+                      v-if="val.loadMessage"
+                      :style="{lineHeight: val.view.height + 'px'}"
+                    >
+                      {{val.loadMessage}}
+                    </p>
+                  </div>
+                </div>
+                <i
+                  class="el-icon-loading"
+                  v-if="obj.loading"
+                  :style="{fontSize: '20px', left: (obj.view.width - 20) / 2 + 'px', top: (obj.view.height - 20) / 2 + 'px'}"
+                ></i>
+                <p
+                  class="render_contain_info"
+                  v-if="obj.loadMessage"
+                  :style="{lineHeight: obj.view.height + 'px'}"
+                >
+                  {{obj.loadMessage}}
+                </p>
+              </div>
+            </div>
+            <i
+              class="el-icon-loading"
+              v-if="item.loading"
+              :style="{fontSize: '20px', left: (item.view.width - 20) / 2 + 'px', top: (item.view.height - 20) / 2 + 'px'}"
+            ></i>
+            <p
+              class="render_contain_info"
+              v-if="item.loadMessage"
+              :style="{lineHeight: item.view.height + 'px'}"
+            >
+              {{item.loadMessage}}
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- </happy-scroll> -->
+    </div>
+    <script type="text/javascript" src="./common/js/happy-scroll.js"></script>
+    <script type="text/javascript" src="./common/js/render.js"></script>
+  </body>
+</html>
