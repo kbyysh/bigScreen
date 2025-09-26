@@ -1,0 +1,109 @@
+.scrollbar::-webkit-scrollbar{    
+  width:8px;
+  opacity: 0.25;
+}
+/* .scroll-box{
+  width: 100%;
+  height: calc(100% - 140px);
+  overflow: hidden;
+  position: relative;
+} */
+/* 滑动轨道 */
+.scrollbar::-webkit-scrollbar-track{
+  /* 底色 */
+  background: rgba(77, 89, 117, 0.25);
+  border-radius:2px;
+  opacity: 0.25;
+}
+/* 滑块 */
+.scrollbar::-webkit-scrollbar-thumb{
+  /* 滚动条颜色 */
+  background:rgba(118, 136, 178, 0.25);
+  border-radius:4px;
+  /* opacity: 0.3; */
+}
+.scrollbar::-webkit-scrollbar-thumb:hover{
+  /* 按住滚动条颜色 */
+  background: rgba(101, 117, 153, 0.25);
+}
+
+.scrollbar::-webkit-scrollbar-corner{
+
+  background:transparent;
+
+}
+
+/* 下面的代码是用于 给 走马灯使用的 */
+/* 下面是自己改版的横向走马灯 */
+.fatherDiv{
+  /* 一定要隐藏掉超出部分的内容 */
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  /* border: 1px solid gray; */
+}
+.fatherDiv .sonDiv {
+  /* 这里不能设为inline，否则translate不起作用要用margin-left来做动画 */
+  display: inline-block; 
+  /* 强制不换行，不设的话由于内容较多会换行到下方 */
+  white-space: nowrap;
+  animation: fatherDiv-move 5s linear infinite;
+  /* 容器的宽度，似乎纯CSS的话只能写死 */
+  transform: translate(100%);
+}
+@keyframes fatherDiv-move {
+  0% {
+      /* 这个地方正常来说应该写成500px，但是实际项目大部分不是写死的 */
+      transform: translate(150px); 
+  }
+  100% {
+      /* 100%是自身的宽度 */
+      /* transform: translate(calc(-100%)); */
+      transform: translate(-150px);
+  }
+}
+
+
+.triangle-up {
+  width: 0;
+  height: 0;
+  border-left: 24px solid transparent;
+  border-right: 24px solid transparent;
+  border-bottom: 48px solid red;
+}
+/* 下三角形 */
+.triangle-down { 
+  width: 0;
+  height: 0;
+  border-left: 24px solid transparent;
+  border-right: 24px solid transparent;
+  border-top: 48px solid red;
+}
+/* 左三角形 */
+.triangle-left { 
+  width: 0;
+  height: 0;
+  border-top: 24px solid transparent;
+  border-right: 48px solid red;
+  border-bottom: 24px solid transparent;
+}
+/* 右三角形 */
+.triangle-right { 
+  width: 0;
+  height: 0;
+  border-top: 24px solid transparent;
+  border-left: 48px solid red;
+  border-bottom: 24px solid transparent;
+}
+/* 分页器 */
+   /* 鼠标移动过去的颜色 */
+   ._page_container ._pages li:hover {
+     opacity: 0.8;
+    /* color: pink;
+    background: url(/_requireModules/css/pic/2.png) */
+}
+._page_container ._jumper ._jumper_input:focus {
+  opacity: 0.9;
+}
