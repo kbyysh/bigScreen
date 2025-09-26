@@ -1,0 +1,41 @@
+.container{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    /* background: #1f252a; */
+}
+.happy-scroll-container{
+    height: 100vh!important;
+    width: 100vw!important;
+    -ms-overflow-style: none;
+    scrollbar-width: none
+}
+.happy-scroll-content{
+    border: none!important;
+}
+.container_body{
+    transform-origin: 0 0;
+}
+
+.container_body .el-icon-loading{
+    font-size: 16px;
+    position: absolute;
+    font-weight: bold;
+    color: #fff;
+}
+.render_contain{
+    width: 100%;
+    height: 100%;
+}
+.render_contain_info{
+    color: #f27a24;
+    width:100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    text-align: center;
+    font-size: 24px;
+}
